@@ -3,6 +3,7 @@ using Prism;
 using Prism.Ioc;
 using PingPong.ViewModels;
 using PingPong.Views;
+using PingPong.Services;
 
 namespace PingPong
 {
@@ -16,13 +17,16 @@ namespace PingPong
         {
             InitializeComponent();
 
-            await NavigationService.NavigateAsync($"{nameof(NavigationPage)}/{nameof(Views.MainPage)}");
+            await NavigationService.NavigateAsync($"/{nameof(Views.MainPage)}");
         }
 
         protected override void RegisterTypes(IContainerRegistry containerRegistry)
         {
             containerRegistry.RegisterForNavigation<NavigationPage>();
             containerRegistry.RegisterForNavigation<MainPage, MainPageViewModel>();
+            containerRegistry.RegisterForNavigation<OptionsPage, OptionsPageViewModel>();
+
+            containerRegistry.RegisterInstance<ISettingsManager>(Container.Resolve<SettingsManager>());
         }
     }
 }

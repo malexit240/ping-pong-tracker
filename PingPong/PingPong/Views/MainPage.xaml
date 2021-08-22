@@ -1,341 +1,521 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
-<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
-             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             xmlns:viewmodels="clr-namespace:PingPong.ViewModels"
-             xmlns:controls="clr-namespace:PingPong.Controls"
-             x:Class="PingPong.Views.MainPage"
-             x:DataType="viewmodels:MainPageViewModel"
-             NavigationPage.HasNavigationBar="False"
-             BackgroundColor="{DynamicResource white}">
+<MasterDetailPage xmlns="http://xamarin.com/schemas/2014/forms"
+                  xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+                  xmlns:viewmodels="clr-namespace:PingPong.ViewModels"
+                  xmlns:controls="clr-namespace:PingPong.Controls" xmlns:models="clr-namespace:PingPong.Models"
+                  x:Class="PingPong.Views.MainPage"
+                  x:DataType="viewmodels:MainPageViewModel"
+                  IsPresented="{Binding IsPresented, Mode=TwoWay}"
+                  BackgroundColor="{DynamicResource white}">
 
-    <ContentPage.Resources>
+    <MasterDetailPage.Master>
 
-        <ResourceDictionary>
+        <ContentPage Title="Options">
 
-            <Style TargetType="Frame">
+            <StackLayout BackgroundColor="{DynamicResource white}"
+                         Padding="14, 14">
 
-                <Setter Property="HasShadow"
+                <BoxView HeightRequest="2"
+                         Color="{DynamicResource gray}"/>
+
+                <controls:ClickableContentView Command="{Binding GameTappedCommand}">
+
+                    <Frame Padding="0"
+                           BackgroundColor="{DynamicResource second_light}">
+
+                        <Label Text="Игра"
+                               HeightRequest="50"
+                               VerticalTextAlignment="Center"
+                               Padding="14, 0"/>
+
+                    </Frame>
+
+                </controls:ClickableContentView>
+
+
+
+                <BoxView HeightRequest="2"
+                         Color="{DynamicResource gray}"/>
+
+                <controls:ClickableContentView Command="{Binding OptionsTappedCommand}">
+
+                    <Frame Padding="0"
+                           HasShadow="False">
+
+                        <Label Text="Опции"
+                               HeightRequest="50"
+                               VerticalTextAlignment="Center"
+                               Padding="14, 0"/>
+
+                    </Frame>
+
+                </controls:ClickableContentView>
+
+                <BoxView HeightRequest="2"
+                         Color="{DynamicResource gray}"/>
+
+            </StackLayout>
+
+        </ContentPage>
+
+    </MasterDetailPage.Master>
+
+    <MasterDetailPage.Detail>
+
+        <ContentPage>
+
+            <ContentPage.Resources>
+
+                <ResourceDictionary>
+
+                    <Style TargetType="Frame">
+
+                        <Setter Property="HasShadow"
                         Value="False"/>
 
-            </Style>
+                    </Style>
 
-        </ResourceDictionary>
+                </ResourceDictionary>
 
-    </ContentPage.Resources>
+            </ContentPage.Resources>
 
-    <!--CONTENT-->
-    <Grid VerticalOptions="Fill"
+            <!--CONTENT-->
+
+            <Grid VerticalOptions="Fill"
           HorizontalOptions="Fill"
           RowDefinitions="0.32*, 2,70, 2, 0.5*"
           RowSpacing="0"
           Padding="14, 0">
 
-        <!--HEADER-->
-        <StackLayout Grid.Row="0"
+
+                <!--HEADER-->
+
+                <StackLayout Grid.Row="0"
                      Spacing="0">
 
-            <Label Text="Ping-Pong"
-                   FontSize="48"
-                   TextColor="{DynamicResource light_gray}"
-                   VerticalOptions="CenterAndExpand"
-                   HorizontalOptions="Center"/>
+                    <Grid ColumnDefinitions="*, 2, 100, 2, *"
+                  ColumnSpacing="6">
 
-        </StackLayout>
+                        <Frame Padding="0">
 
-        <!--SEPARATOR-->
-        <BoxView Color="{DynamicResource gray}"
+                            <Frame.Background>
+
+                                <LinearGradientBrush StartPoint="10, 0"
+                                             EndPoint="0, 0">
+
+                                    <GradientStop Color="{DynamicResource primary_lightest}"/>
+
+                                    <GradientStop Color="{DynamicResource primary}"/>
+
+                                </LinearGradientBrush>
+
+                            </Frame.Background>
+
+                            <Label Text="{Binding Game.CurrentSet.LeftPlayer.Name}"/>
+                        </Frame>
+
+                        <BoxView Grid.Column="1"
+                         Color="{DynamicResource gray}"/>
+
+                        <BoxView Grid.Column="3"
+                         Color="{DynamicResource gray}"/>
+
+                        <Frame Grid.Column="4"
+                       Padding="0">
+
+                            <Label Grid.Column="1"
+                       Text="{Binding Game.CurrentSet.RightPlayer.Name}"/>
+                        </Frame>
+
+                    </Grid>
+
+                    <ScrollView HeightRequest="120"
+                        IsEnabled="False"
+                        VerticalOptions="EndAndExpand">
+
+                        <StackLayout BindableLayout.ItemsSource="{Binding Game.Queu}"
+                             Spacing="10">
+
+                            <BindableLayout.ItemTemplate>
+
+                                <DataTemplate x:DataType="models:PlayerViewModel">
+
+                                    <StackLayout HeightRequest="50">
+
+                                        <Frame BackgroundColor="{DynamicResource alternate_lightest}"
+                                       VerticalOptions="Center"
+                                       CornerRadius="12"
+                                       Padding="0"
+                                       WidthRequest="160"
+                                       HorizontalOptions="Center">
+
+                                            <Label Text="{Binding Name}"
+                                           VerticalTextAlignment="Center"
+                                           HorizontalTextAlignment="Center"
+                                           TextColor="{DynamicResource white}"
+                                           HeightRequest="50"/>
+
+                                        </Frame>
+
+                                    </StackLayout>
+
+                                </DataTemplate>
+
+                            </BindableLayout.ItemTemplate>
+
+                        </StackLayout>
+
+                    </ScrollView>
+
+                </StackLayout>
+
+
+                <!--SEPARATOR-->
+
+                <BoxView Color="{DynamicResource gray}"
                  Grid.Row="1"/>
 
-        <!--CLEAR BUTTON-->
-        <StackLayout Grid.Row="2"
-                     Padding="0, 7">
 
-            <controls:ClickableContentView Command="{Binding ClearCommand}"
+                <!--NEXT BUTTON-->
+
+                <Grid Grid.Row="2"
+              Padding="0, 7"
+              ColumnDefinitions="*"
+              ColumnSpacing="7">
+
+                    <controls:ClickableContentView Command="{Binding NextCommand}"
                                            VerticalOptions="FillAndExpand"
                                            HorizontalOptions="Fill">
 
-                <Frame Padding="14, 0"
+                        <Frame Padding="14, 0"
                        BackgroundColor="{DynamicResource primary_light}"
                        VerticalOptions="Fill"
                        CornerRadius="12"
+                       Opacity="0.32"
+                       InputTransparent="True"
                        HasShadow="False">
 
-                    <Frame.Background>
+                            <Frame.Background>
 
-                        <LinearGradientBrush StartPoint="0, 0"
+                                <LinearGradientBrush StartPoint="0, 0"
                                              EndPoint="0, 0">
-                            
-                            <GradientStop Color="{DynamicResource primary}"/>
 
-                            <GradientStop Color="{DynamicResource primary_lightest}"/>
+                                    <GradientStop Color="{DynamicResource primary}"/>
 
-                            <GradientStop Color="{DynamicResource primary}"/>
+                                    <GradientStop Color="{DynamicResource primary_lightest}"/>
 
-                        </LinearGradientBrush>
+                                    <GradientStop Color="{DynamicResource primary}"/>
 
-                    </Frame.Background>
+                                </LinearGradientBrush>
 
-                    <Grid>
+                            </Frame.Background>
 
-                        <controls:BorderedLabel Text="Сброс"
+                            <Frame.Triggers>
+
+                                <DataTrigger TargetType="Frame"
+                                     Binding="{Binding Game.IsNextAllowed}"
+                                     Value="True">
+
+                                    <Setter Property="Opacity"
+                                    Value="1"/>
+
+                                    <Setter Property="InputTransparent"
+                                    Value="False"/>
+
+                                </DataTrigger>
+
+                            </Frame.Triggers>
+
+                            <Grid>
+
+                                <controls:BorderedLabel Text="Дальше"
                                                 Style="{DynamicResource lstyle_i1_b}"
                                                 VerticalTextAlignment="Center"
                                                 HorizontalOptions="Center"
                                                 FontSize="32"/>
 
-                        <Label Text="Сброс"
+                                <Label Text="Дальше"
                                Style="{DynamicResource lstyle_i1}"
                                VerticalTextAlignment="Center"
                                HorizontalOptions="Center"
                                FontSize="32"/>
 
-                    </Grid>
+                            </Grid>
 
-                </Frame>
+                        </Frame>
 
-            </controls:ClickableContentView>
+                    </controls:ClickableContentView>
 
-        </StackLayout>
+                </Grid>
 
-        <!--SEPARATOR-->
-        <BoxView Color="{DynamicResource gray}"
+
+                <!--SEPARATOR-->
+
+                <BoxView Color="{DynamicResource gray}"
                  Grid.Row="3"/>
 
-        <!--LEFT PART-->
-        <Grid Grid.Row="4"
+                <Grid Grid.Row="4"
               ColumnDefinitions="*, 2, *"
               ColumnSpacing="7"
               Padding="0, 14">
 
-            <Grid RowDefinitions="90, 56, *"
+
+                    <!--LEFT PART-->
+
+                    <Grid RowDefinitions="90, 56, *"
                   Grid.Column="0"
                   RowSpacing="8">
 
-                <!--LEFT POINTS-->
-                <Frame Padding="0"
+
+                        <!--LEFT POINTS-->
+
+                        <Frame Padding="0"
                        Margin="0"
                        CornerRadius="8"
                        HasShadow="False">
 
-                    <Frame.Background>
+                            <Frame.Background>
 
-                        <LinearGradientBrush StartPoint="0, 0"
+                                <LinearGradientBrush StartPoint="0, 0"
                                              EndPoint="0, 0">
 
-                            <GradientStop Color="{DynamicResource primary}"/>
+                                    <GradientStop Color="{DynamicResource primary}"/>
 
-                            <GradientStop Color="{DynamicResource primary_lightest}"/>
+                                    <GradientStop Color="{DynamicResource primary_lightest}"/>
 
-                        </LinearGradientBrush>
+                                </LinearGradientBrush>
 
-                    </Frame.Background>
+                            </Frame.Background>
 
-                    <Grid VerticalOptions="Center"
+                            <Grid VerticalOptions="Center"
                           HorizontalOptions="Fill">
 
-                        <controls:BorderedLabel Text="{Binding Game.CurrentSet.LeftPoints}"
+                                <controls:BorderedLabel Text="{Binding Game.CurrentSet.LeftPoints}"
                                                 HorizontalTextAlignment="Center"
                                                 Style="{DynamicResource lstyle_i1_b}"/>
 
-                        <Label Text="{Binding Game.CurrentSet.LeftPoints}"
+                                <Label Text="{Binding Game.CurrentSet.LeftPoints}"
                                HorizontalTextAlignment="Center"
                                Style="{DynamicResource lstyle_i1}" />
 
-                    </Grid>
+                            </Grid>
 
-                </Frame>
+                        </Frame>
 
-                <!--LEFT MINUS-->
-                <controls:ClickableContentView Command="{Binding MinusCommand}"
+
+                        <!--LEFT MINUS-->
+
+                        <controls:ClickableContentView Command="{Binding MinusCommand}"
                                                Grid.Row="1"
                                                CommandParameter="Left"
                                                Padding="0">
 
-                    <Frame BackgroundColor="{DynamicResource second_light}"
+                            <Frame BackgroundColor="{DynamicResource second_light}"
                            CornerRadius="12"
                            Padding="0">
 
-                        <Frame.Background>
+                                <Frame.Background>
 
-                            <LinearGradientBrush StartPoint="0, 0"
+                                    <LinearGradientBrush StartPoint="0, 0"
                                                  EndPoint="0, 0">
 
-                                <GradientStop Color="{DynamicResource second_light}"/>
+                                        <GradientStop Color="{DynamicResource second_light}"/>
 
-                                <GradientStop Color="{DynamicResource second_lightest}"/>
+                                        <GradientStop Color="{DynamicResource second_lightest}"/>
 
-                            </LinearGradientBrush>
+                                    </LinearGradientBrush>
 
-                        </Frame.Background>
+                                </Frame.Background>
 
-                        <Grid VerticalOptions="Fill">
+                                <Grid VerticalOptions="Fill">
 
-                            <controls:BorderedLabel Text="-"
+                                    <controls:BorderedLabel Text="-"
                                                     Style="{DynamicResource minus_border_style}"/>
 
-                            <Label Text="-"
+                                    <Label Text="-"
                                    Style="{DynamicResource minus_style}" />
-                        </Grid>
+                                </Grid>
 
-                    </Frame>
+                            </Frame>
 
-                </controls:ClickableContentView>
+                        </controls:ClickableContentView>
 
-                <!--LEFT PLUS-->
-                <controls:ClickableContentView Command="{Binding PlusCommand}"
+
+                        <!--LEFT PLUS-->
+
+                        <controls:ClickableContentView Command="{Binding PlusCommand}"
                                                Grid.Row="2"
                                                CommandParameter="Left">
 
-                    <Frame CornerRadius="12"
+                            <Frame CornerRadius="12"
                            Padding="0">
 
-                        <Frame.Background>
+                                <Frame.Background>
 
-                            <LinearGradientBrush StartPoint="0, 0"
+                                    <LinearGradientBrush StartPoint="0, 0"
                                                  EndPoint="0, 0">
 
-                                <GradientStop Color="{DynamicResource third}"/>
+                                        <GradientStop Color="{DynamicResource third}"/>
 
-                                <GradientStop Color="{DynamicResource third_light}"/>
+                                        <GradientStop Color="{DynamicResource third_light}"/>
 
-                            </LinearGradientBrush>
+                                    </LinearGradientBrush>
 
-                        </Frame.Background>
+                                </Frame.Background>
 
-                        <Grid>
+                                <Grid>
 
-                            <controls:BorderedLabel Text="+"
+                                    <controls:BorderedLabel Text="+"
                                                     Style="{DynamicResource plus_border_style}"/>
 
-                            <Label  Text="+"
+                                    <Label  Text="+"
                                     Style="{DynamicResource plus_style}"/>
 
-                        </Grid>
+                                </Grid>
 
-                    </Frame>
+                            </Frame>
 
-                </controls:ClickableContentView>
+                        </controls:ClickableContentView>
 
-            </Grid>
+                    </Grid>
 
-            <!--CENTRAL SEPARATOR-->
-            <BoxView Color="{DynamicResource gray}"
+
+                    <!--CENTRAL SEPARATOR-->
+
+                    <BoxView Color="{DynamicResource gray}"
                      Grid.Column="1"/>
 
-            <!--RIGHT PART-->
-            <Grid RowDefinitions="90, 56, *"
+
+                    <!--RIGHT PART-->
+
+                    <Grid RowDefinitions="90, 56, *"
                   Grid.Column="2"
                   RowSpacing="8">
 
-                <!--RIGHT POINTS-->
-                <Frame Margin="0"
+
+                        <!--RIGHT POINTS-->
+
+                        <Frame Margin="0"
                        Padding="0"
                        HasShadow="False"
                        CornerRadius="8">
 
-                    <Frame.Background>
+                            <Frame.Background>
 
-                        <LinearGradientBrush StartPoint="0, 0"
+                                <LinearGradientBrush StartPoint="0, 0"
                                              EndPoint="0, 0">
 
-                            <GradientStop Color="{DynamicResource primary_lightest}"/>
+                                    <GradientStop Color="{DynamicResource primary_lightest}"/>
 
-                            <GradientStop Color="{DynamicResource primary}"/>
+                                    <GradientStop Color="{DynamicResource primary}"/>
 
-                        </LinearGradientBrush>
+                                </LinearGradientBrush>
 
-                    </Frame.Background>
+                            </Frame.Background>
 
-                    <Grid VerticalOptions="Center"
+                            <Grid VerticalOptions="Center"
                           HorizontalOptions="Fill">
 
-                        <controls:BorderedLabel Text="{Binding Game.CurrentSet.RightPoints}"
+                                <controls:BorderedLabel Text="{Binding Game.CurrentSet.RightPoints}"
                                                 HorizontalTextAlignment="Center"
                                                 Style="{DynamicResource lstyle_i1_b}"/>
 
-                        <Label  Text="{Binding Game.CurrentSet.RightPoints}"
+                                <Label  Text="{Binding Game.CurrentSet.RightPoints}"
                                 HorizontalTextAlignment="Center"
                                 Style="{DynamicResource lstyle_i1}" />
 
-                    </Grid>
+                            </Grid>
 
-                </Frame>
+                        </Frame>
 
-                <!--RIGHT MINUS-->
-                <controls:ClickableContentView Command="{Binding MinusCommand}"
+
+                        <!--RIGHT MINUS-->
+
+                        <controls:ClickableContentView Command="{Binding MinusCommand}"
                                                Grid.Row="1"
                                                CommandParameter="Right"
                                                Padding="0">
 
-                    <Frame  BackgroundColor="{DynamicResource second_light}"
+                            <Frame  BackgroundColor="{DynamicResource second_light}"
                             CornerRadius="12"
                             Padding="0">
 
-                        <Frame.Background>
+                                <Frame.Background>
 
-                            <LinearGradientBrush StartPoint="0, 0"
+                                    <LinearGradientBrush StartPoint="0, 0"
                                              EndPoint="0, 0">
 
-                                <GradientStop Color="{DynamicResource second_lightest}"/>
+                                        <GradientStop Color="{DynamicResource second_lightest}"/>
 
-                                <GradientStop Color="{DynamicResource second_light}"/>
+                                        <GradientStop Color="{DynamicResource second_light}"/>
 
-                            </LinearGradientBrush>
+                                    </LinearGradientBrush>
 
-                        </Frame.Background>
+                                </Frame.Background>
 
-                        <Grid VerticalOptions="Fill">
+                                <Grid VerticalOptions="Fill">
 
-                            <controls:BorderedLabel Text="-"
+                                    <controls:BorderedLabel Text="-"
                                                     Style="{DynamicResource minus_border_style}"/>
 
-                            <Label  Text="-"
+                                    <Label  Text="-"
                                     Style="{DynamicResource minus_style}" />
-                        </Grid>
+                                </Grid>
 
-                    </Frame>
+                            </Frame>
 
-                </controls:ClickableContentView>
+                        </controls:ClickableContentView>
 
-                <!--RIGHT PLUS-->
-                <controls:ClickableContentView Command="{Binding PlusCommand}"
+
+                        <!--RIGHT PLUS-->
+                        <controls:ClickableContentView Command="{Binding PlusCommand}"
                                                Grid.Row="2"
                                                CommandParameter="Right">
 
-                    <Frame  CornerRadius="12"
+                            <Frame  CornerRadius="12"
                             Padding="0">
 
-                        <Frame.Background>
+                                <Frame.Background>
 
-                            <LinearGradientBrush StartPoint="0, 0"
+                                    <LinearGradientBrush StartPoint="0, 0"
                                                  EndPoint="0, 0">
 
-                                <GradientStop Color="{DynamicResource third_light}"/>
+                                        <GradientStop Color="{DynamicResource third_light}"/>
 
-                                <GradientStop Color="{DynamicResource third}"/>
+                                        <GradientStop Color="{DynamicResource third}"/>
 
-                            </LinearGradientBrush>
+                                    </LinearGradientBrush>
 
-                        </Frame.Background>
+                                </Frame.Background>
 
-                        <Grid>
+                                <Grid>
 
-                            <controls:BorderedLabel Text="+"
+                                    <controls:BorderedLabel Text="+"
                                                     Style="{DynamicResource plus_border_style}"/>
 
-                            <Label  Text="+"
+                                    <Label  Text="+"
                                     Style="{DynamicResource plus_style}"/>
 
-                        </Grid>
+                                </Grid>
 
-                    </Frame>
+                            </Frame>
 
-                </controls:ClickableContentView>
+                        </controls:ClickableContentView>
+
+                    </Grid>
+
+                </Grid>
 
             </Grid>
 
-        </Grid>
 
-    </Grid>
 
-</ContentPage>
+        </ContentPage>
+
+    </MasterDetailPage.Detail>
+
+
+
+
+
+</MasterDetailPage>

@@ -12,7 +12,13 @@ namespace PingPong.Views
     {
         public MainPage()
         {
-            InitializeComponent();
+            try
+            {
+                InitializeComponent();
+            }
+            catch (Exception ex)
+            {
+            }
         }
     }
 }

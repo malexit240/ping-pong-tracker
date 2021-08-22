@@ -1,0 +1,46 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:viewmodels="clr-namespace:PingPong.ViewModels"
+             xmlns:views="clr-namespace:PingPong.Views"
+             x:Class="PingPong.Views.OptionsPage"
+             x:DataType="viewmodels:OptionsPageViewModel">
+
+    <Grid VerticalOptions="Fill"
+          RowSpacing="0"
+          RowDefinitions="56, 2,  *">
+
+        <StackLayout HeightRequest="46"
+                     Orientation="Horizontal"
+                     Padding="14, 0"
+                     Spacing="14">
+
+            <Label Text="X"
+                   VerticalOptions="Center">
+
+                <Label.GestureRecognizers>
+
+                    <TapGestureRecognizer Command="{Binding GoBackCommand}"/>
+
+                </Label.GestureRecognizers>
+                
+            </Label>
+
+            <Label Text="Опции"
+                   VerticalOptions="Center"/>
+
+        </StackLayout>
+
+        <BoxView Color="{DynamicResource gray}"
+                 Margin="14, 0"
+                 Grid.Row="1"/>
+
+        <ScrollView Grid.Row="2">
+
+            <!--<views:SimpleRuleOptionsView BindingContext="{Binding SimpleRuleViewModel}" />-->
+
+        </ScrollView>
+
+    </Grid>
+
+</ContentPage>
