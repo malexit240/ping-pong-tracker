@@ -53,7 +53,7 @@
                 Value="Montserrat600"/>
 
         <Setter Property="BorderWidth"
-                Value="3"/>
+                Value="4"/>
 
         <Setter Property="TextColor"
                 Value="{DynamicResource black}"/>
@@ -94,7 +94,7 @@
                 Value="Montserrat600"/>
 
         <Setter Property="BorderWidth"
-                Value="3"/>
+                Value="4"/>
 
         <Setter Property="TextColor"
                 Value="{DynamicResource black}"/>
@@ -135,7 +135,7 @@
                 Value="Center"/>
 
         <Setter Property="BorderWidth"
-                Value="3"/>
+                Value="4"/>
 
         <Setter Property="TextColor"
                 Value="{DynamicResource black}"/>

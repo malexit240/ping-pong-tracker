@@ -26,7 +26,7 @@
     <!--CONTENT-->
     <Grid VerticalOptions="Fill"
           HorizontalOptions="Fill"
-          RowDefinitions="0.32*, 2,70, 2, 0.5*"
+          RowDefinitions="0.3*, 2,70, 2, 0.5*"
           RowSpacing="0"
           Padding="14, 0">
 
@@ -64,12 +64,18 @@
 
                         <LinearGradientBrush StartPoint="0, 0"
                                              EndPoint="0, 0">
-                            
-                            <GradientStop Color="{DynamicResource primary}"/>
 
                             <GradientStop Color="{DynamicResource primary_lightest}"/>
 
+                            <GradientStop Color="{DynamicResource primary_light}"/>
+
                             <GradientStop Color="{DynamicResource primary}"/>
+
+                            <GradientStop Color="{DynamicResource primary}"/>
+
+                            <GradientStop Color="{DynamicResource primary_light}"/>
+
+                            <GradientStop Color="{DynamicResource primary_lightest}"/>
 
                         </LinearGradientBrush>
 
@@ -80,13 +86,14 @@
                         <controls:BorderedLabel Text="Сброс"
                                                 Style="{DynamicResource lstyle_i1_b}"
                                                 VerticalTextAlignment="Center"
-                                                HorizontalOptions="Center"
+                                                HorizontalTextAlignment="Center"
+                                                BorderWidth="4"
                                                 FontSize="32"/>
 
                         <Label Text="Сброс"
                                Style="{DynamicResource lstyle_i1}"
                                VerticalTextAlignment="Center"
-                               HorizontalOptions="Center"
+                               HorizontalTextAlignment="Center"
                                FontSize="32"/>
 
                     </Grid>
@@ -114,8 +121,7 @@
                 <!--LEFT POINTS-->
                 <Frame Padding="0"
                        Margin="0"
-                       CornerRadius="8"
-                       HasShadow="False">
+                       CornerRadius="8">
 
                     <Frame.Background>
 
