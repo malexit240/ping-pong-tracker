@@ -234,7 +234,7 @@
 
                     <Grid.Behaviors>
 
-                        <behavior:PropertyAnimationBehavior TrackedProperites="ColumnDefinitions"/>
+                        <behavior:AnimatedPropertyChangedBehavior TrackedProperites="ColumnDefinitions"/>
 
                     </Grid.Behaviors>
 
