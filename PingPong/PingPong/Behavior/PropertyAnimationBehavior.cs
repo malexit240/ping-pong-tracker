@@ -181,7 +181,7 @@ namespace PingPong.Behavior
             _view = bindable as Grid;
             _animatedProperties = new Dictionary<string, AnimatedPropertyChanged<object>>();
 
-            columnDefinitionsProperty = new AnimatedPropertyChanged<ColumnDefinitionCollection>(_view, v => _view.ColumnDefinitions = v, new ColumnDefinitionCollectionExtraPolationConverter(), 500);
+            columnDefinitionsProperty = new AnimatedPropertyChanged<ColumnDefinitionCollection>(_view, v => _view.ColumnDefinitions = v, new ColumnDefinitionCollectionExtraPolationConverter(), 300);
 
             _view.PropertyChanging += Bindable_PropertyChanging;
             _view.PropertyChanged += Bindable_PropertyChanged;

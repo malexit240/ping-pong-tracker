@@ -93,6 +93,15 @@
                 <StackLayout Grid.Row="0"
                              Spacing="0">
 
+                    <Label Text="Пинг : Понг"
+                           FontSize="48"
+                           FontFamily="Montserrat500"
+                           TextColor="{DynamicResource light_gray}"
+                           VerticalOptions="CenterAndExpand"
+                           HorizontalOptions="Fill"
+                           
+                           HorizontalTextAlignment="Center"/>
+                    
                 </StackLayout>
 
                 <!--SEPARATOR-->
