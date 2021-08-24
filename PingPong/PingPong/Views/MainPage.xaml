@@ -99,9 +99,8 @@
                            TextColor="{DynamicResource light_gray}"
                            VerticalOptions="CenterAndExpand"
                            HorizontalOptions="Fill"
-                           
                            HorizontalTextAlignment="Center"/>
-                    
+
                 </StackLayout>
 
                 <!--SEPARATOR-->
@@ -116,14 +115,30 @@
 
                     <controls:ClickableContentView Command="{Binding NextCommand}"
                                                    VerticalOptions="FillAndExpand"
-                                                   HorizontalOptions="Fill">
+                                                   HorizontalOptions="Fill"
+                                                   Opacity="0.32"
+                                                   InputTransparent="True">
+
+                        <controls:ClickableContentView.Triggers>
+
+                            <DataTrigger TargetType="controls:ClickableContentView"
+                                         Binding="{Binding Game.IsNextAllowed}"
+                                         Value="True">
+
+                                <Setter Property="Opacity"
+                                        Value="1"/>
+
+                                <Setter Property="InputTransparent"
+                                        Value="False"/>
+
+                            </DataTrigger>
+
+                        </controls:ClickableContentView.Triggers>
 
                         <Frame Padding="14, 0"
                                BackgroundColor="{DynamicResource primary_light}"
                                VerticalOptions="Fill"
                                CornerRadius="12"
-                               Opacity="0.32"
-                               InputTransparent="True"
                                HasShadow="False">
 
                             <Frame.Background>
@@ -144,22 +159,6 @@
                                 </LinearGradientBrush>
 
                             </Frame.Background>
-
-                            <Frame.Triggers>
-
-                                <DataTrigger TargetType="Frame"
-                                             Binding="{Binding Game.IsNextAllowed}"
-                                             Value="True">
-
-                                    <Setter Property="Opacity"
-                                            Value="1"/>
-
-                                    <Setter Property="InputTransparent"
-                                            Value="False"/>
-
-                                </DataTrigger>
-
-                            </Frame.Triggers>
 
                             <Grid>
 
@@ -235,7 +234,7 @@
 
                     <Grid.Behaviors>
 
-                        <behavior:PropertyAnimationBehavior/>
+                        <behavior:PropertyAnimationBehavior TrackedProperites="ColumnDefinitions"/>
 
                     </Grid.Behaviors>
 
