@@ -2,6 +2,8 @@
 using Prism.Navigation;
 using System.Windows.Input;
 using PingPong.Services;
+using PingPong.Models;
+using System;
 
 namespace PingPong.ViewModels
 {
@@ -9,25 +11,47 @@ namespace PingPong.ViewModels
     {
         private ISettingsManager _settingsManager;
 
+        private readonly IGameService _gameService;
+
         public OptionsPageViewModel(
             INavigationService navigationService,
-            ISettingsManager settingsManager)
+            ISettingsManager settingsManager,
+            IGameService gameService)
             : base(navigationService)
         {
             _settingsManager = settingsManager;
+            _gameService = gameService;
+
+            Game = (GameViewModel)_gameService.GetGame();
+        }
+
+        private GameViewModel _game;
+        public GameViewModel Game
+        {
+            get => _game;
+            set => SetProperty(ref _game, value);
         }
 
         public ICommand GoBackCommand => new DelegateCommand(OnGoBackCommand);
 
-        public override void Initialize(INavigationParameters parameters)
-        {
-            base.Initialize(parameters);
+        public ICommand PlusCommand => new DelegateCommand(OnPlusCommand);
 
-            var rules = _settingsManager.GetRules();
+        private void OnPlusCommand()
+        {
+            Game.PointsToWin++;
+        }
+
+        public ICommand MinusCommand => new DelegateCommand(OnMinusCommand);
+
+        private void OnMinusCommand()
+        {
+            Game.PointsToWin--;
         }
 
         private async void OnGoBackCommand()
         {
+            _gameService.SetGame((GameModel)Game);
+            _settingsManager.PointsToWin = Game.PointsToWin;
             await NavigationService.GoBackAsync(null, true, true);
         }
     }

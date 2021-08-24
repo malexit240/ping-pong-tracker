@@ -27,6 +27,7 @@ namespace PingPong
             containerRegistry.RegisterForNavigation<OptionsPage, OptionsPageViewModel>();
 
             containerRegistry.RegisterInstance<ISettingsManager>(Container.Resolve<SettingsManager>());
+            containerRegistry.RegisterInstance<IGameService>(Container.Resolve<GameService>());
         }
     }
 }

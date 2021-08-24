@@ -3,6 +3,7 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:viewmodels="clr-namespace:PingPong.ViewModels"
              xmlns:views="clr-namespace:PingPong.Views"
+             xmlns:controls="clr-namespace:PingPong.Controls"
              x:Class="PingPong.Views.OptionsPage"
              x:DataType="viewmodels:OptionsPageViewModel">
 
@@ -10,26 +11,40 @@
           RowSpacing="0"
           RowDefinitions="56, 2,  *">
 
-        <StackLayout HeightRequest="46"
-                     Orientation="Horizontal"
-                     Padding="14, 0"
-                     Spacing="14">
+        <Grid HeightRequest="42"
+              ColumnDefinitions="20, 2, *"
+              Margin="14"
+              ColumnSpacing="14">
 
             <Label Text="X"
-                   VerticalOptions="Center">
+                   FontSize="20"
+                   VerticalOptions="Fill"
+                   HorizontalOptions="Fill"
+                   Style="{DynamicResource lstyle_i1}"
+                   TextColor="{DynamicResource black}"
+                   VerticalTextAlignment="Center"
+                   HorizontalTextAlignment="Center">
 
                 <Label.GestureRecognizers>
 
                     <TapGestureRecognizer Command="{Binding GoBackCommand}"/>
 
                 </Label.GestureRecognizers>
-                
+
             </Label>
 
-            <Label Text="Опции"
-                   VerticalOptions="Center"/>
+            <BoxView Color="{DynamicResource gray}"
+                     Grid.Column="1"/>
 
-        </StackLayout>
+            <Label Text="Опции"
+                   Grid.Column="2"
+                   Style="{DynamicResource lstyle_i1}"
+                   TextColor="{DynamicResource black}"
+                   FontSize="14"
+                   VerticalOptions="Fill"
+                   VerticalTextAlignment="Center"/>
+
+        </Grid>
 
         <BoxView Color="{DynamicResource gray}"
                  Margin="14, 0"
@@ -37,7 +52,100 @@
 
         <ScrollView Grid.Row="2">
 
-            <!--<views:SimpleRuleOptionsView BindingContext="{Binding SimpleRuleViewModel}" />-->
+            <StackLayout VerticalOptions="Start"
+                         Spacing="0">
+
+                <StackLayout Orientation="Horizontal"
+                             Padding="14">
+
+                    <controls:ClickableContentView VerticalOptions="FillAndExpand"
+                                               HorizontalOptions="Fill"
+                                               Command="{Binding MinusCommand}">
+
+                        <Frame Padding="24, 0"
+                           BackgroundColor="{DynamicResource second_light}"
+                           BorderColor="{DynamicResource gray}"
+                           VerticalOptions="Center"
+                           CornerRadius="12"
+                           HasShadow="False">
+
+                            <Grid>
+
+                                <controls:BorderedLabel Text="-"
+                                                    Style="{DynamicResource minus_border_style}"
+                                                    VerticalTextAlignment="Center"
+                                                    HorizontalTextAlignment="Center"
+                                                    BorderWidth="4"
+                                                    FontSize="24"/>
+
+                                <Label Text="-"
+                                   Style="{DynamicResource minus_style}"
+                                   VerticalTextAlignment="Center"
+                                   HorizontalTextAlignment="Center"
+                                   FontSize="24"/>
+
+                            </Grid>
+
+                        </Frame>
+
+                    </controls:ClickableContentView>
+
+                    <Grid WidthRequest="50">
+
+                        <controls:BorderedLabel Text="{Binding Game.PointsToWin}"
+                                                    Style="{DynamicResource minus_border_style}"
+                                                    VerticalTextAlignment="Center"
+                                                    HorizontalTextAlignment="Center"
+                                                    BorderWidth="4"
+                                                    FontSize="24"/>
+
+                        <Label Text="{Binding Game.PointsToWin}"
+                                   Style="{DynamicResource minus_style}"
+                                   VerticalTextAlignment="Center"
+                                   HorizontalTextAlignment="Center"
+                                   FontSize="24"/>
+
+                    </Grid>
+
+                    <controls:ClickableContentView VerticalOptions="FillAndExpand"
+                                               HorizontalOptions="Fill"
+                                                   Command="{Binding PlusCommand}">
+
+                        <Frame Padding="24, 0"
+                           BackgroundColor="{DynamicResource second_light}"
+                           VerticalOptions="Center"
+                           CornerRadius="12"
+                               BorderColor="{DynamicResource gray}"
+                           HasShadow="False">
+
+                            <Grid>
+
+                                <controls:BorderedLabel Text="+"
+                                                    Style="{DynamicResource plus_border_style}"
+                                                    VerticalTextAlignment="Center"
+                                                    HorizontalTextAlignment="Center"
+                                                    BorderWidth="4"
+                                                    FontSize="24"/>
+
+                                <Label Text="+"
+                                   Style="{DynamicResource plus_style}"
+                                   VerticalTextAlignment="Center"
+                                   HorizontalTextAlignment="Center"
+                                   FontSize="24"/>
+
+                            </Grid>
+
+                        </Frame>
+
+                    </controls:ClickableContentView>
+
+                </StackLayout>
+
+                <BoxView Color="{DynamicResource gray}"
+                         Margin="14, 0"
+                         HeightRequest="2"/>
+
+            </StackLayout>
 
         </ScrollView>
 

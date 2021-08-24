@@ -2,11 +2,8 @@
 using PingPong.Models;
 using Prism.Commands;
 using System.Windows.Input;
-using System;
-using System.Threading.Tasks;
 using PingPong.Views;
 using PingPong.Services;
-using System.Linq;
 
 namespace PingPong.ViewModels
 {
@@ -14,14 +11,18 @@ namespace PingPong.ViewModels
     {
         private readonly ISettingsManager _settingsManager;
 
+        private readonly IGameService _gameService;
+
         public MainPageViewModel(
             INavigationService navigationService,
-            ISettingsManager settingsManager)
+            ISettingsManager settingsManager,
+            IGameService gameService)
             : base(navigationService)
         {
             _settingsManager = settingsManager;
+            _gameService = gameService;
 
-            Game = new GameViewModel();
+            Game = (GameViewModel)_gameService.GetGame();
         }
 
         #region -- Public Properties --
@@ -48,17 +49,7 @@ namespace PingPong.ViewModels
 
         public ICommand GameTappedCommand => new DelegateCommand(OnGameTappedCommand);
 
-        private void OnGameTappedCommand()
-        {
-            IsPresented = false;
-        }
-
         public ICommand OptionsTappedCommand => new DelegateCommand(OnOptionsTappedCommand);
-
-        private async void OnOptionsTappedCommand()
-        {
-            await NavigationService.NavigateAsync(nameof(OptionsPage), null, true, false);
-        }
 
         #endregion
 
@@ -66,23 +57,21 @@ namespace PingPong.ViewModels
         {
             base.OnNavigatedTo(parameters);
 
-            Game.CurrentRule = _settingsManager.GetRules().FirstOrDefault(r => r.IsChoosed);
-
-            var playersAmount = _settingsManager.PlayersAmount;
-
-            for (int i = 0; i < playersAmount; i++)
-            {
-                Game.Queu.Add(new PlayerViewModel());
-            }
-
-            Game.CurrentRule.NextGame(Game);
+            Game.PointsToWin = _gameService.GetGame().PointsToWin;
         }
 
         #region -- Private Helpers --
 
         private void OnNextCommand()
         {
-            Game.CurrentRule.NextGame(Game);
+            if (Game.IsNextAllowed)
+            {
+                if (Game.LeftPoints >= Game.PointsToWin || Game.RightPoints >= Game.PointsToWin)
+                {
+                    Game.LeftPoints = Game.RightPoints = 0;
+                    Game.IsNextAllowed = false;
+                }
+            }
         }
 
         private void OnMinusCommand(string parameter)
@@ -90,21 +79,21 @@ namespace PingPong.ViewModels
             switch (parameter)
             {
                 case "Left":
-                    if (Game.CurrentSet.LeftPoints > 0)
+                    if (Game.LeftPoints > 0)
                     {
-                        Game.CurrentSet.LeftPoints--;
+                        Game.LeftPoints--;
                     }
                     break;
 
                 case "Right":
-                    if (Game.CurrentSet.RightPoints > 0)
+                    if (Game.RightPoints > 0)
                     {
-                        Game.CurrentSet.RightPoints--;
+                        Game.RightPoints--;
                     }
                     break;
             }
 
-            Game.CurrentRule.Update(Game);
+            Game.IsNextAllowed = Game.LeftPoints >= Game.PointsToWin || Game.RightPoints >= Game.PointsToWin;
         }
 
         private void OnPlusCommand(string parameter)
@@ -112,15 +101,26 @@ namespace PingPong.ViewModels
             switch (parameter)
             {
                 case "Left":
-                    Game.CurrentSet.LeftPoints++;
+                    Game.LeftPoints++;
                     break;
 
                 case "Right":
-                    Game.CurrentSet.RightPoints++;
+                    Game.RightPoints++;
                     break;
             }
 
-            Game.CurrentRule.Update(Game);
+            Game.IsNextAllowed = Game.LeftPoints >= Game.PointsToWin || Game.RightPoints >= Game.PointsToWin;
+        }
+
+        private void OnGameTappedCommand()
+        {
+            IsPresented = false;
+        }
+        private async void OnOptionsTappedCommand()
+        {
+            _gameService.SetGame((GameModel)Game);
+
+            await NavigationService.NavigateAsync(nameof(OptionsPage), null, true, false);
         }
 
         #endregion
