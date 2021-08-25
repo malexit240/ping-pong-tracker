@@ -4,6 +4,9 @@ using Prism.Commands;
 using System.Windows.Input;
 using PingPong.Views;
 using PingPong.Services;
+using Xamarin.Essentials;
+using System.Threading.Tasks;
+using System.Threading;
 
 namespace PingPong.ViewModels
 {
@@ -70,6 +73,7 @@ namespace PingPong.ViewModels
                 {
                     Game.LeftPoints = Game.RightPoints = 0;
                     Game.IsNextAllowed = false;
+                    SimpleSpeach.SpeakWithDelay($"Погнали", 0);
                 }
             }
         }
@@ -94,9 +98,11 @@ namespace PingPong.ViewModels
             }
 
             Game.IsNextAllowed = Game.LeftPoints >= Game.PointsToWin || Game.RightPoints >= Game.PointsToWin;
+
+            SimpleSpeach.SpeakWithDelay($"{Game.LeftPoints} : {Game.RightPoints}", 400);
         }
 
-        private void OnPlusCommand(string parameter)
+        private async void OnPlusCommand(string parameter)
         {
             switch (parameter)
             {
@@ -110,6 +116,16 @@ namespace PingPong.ViewModels
             }
 
             Game.IsNextAllowed = Game.LeftPoints >= Game.PointsToWin || Game.RightPoints >= Game.PointsToWin;
+
+            if (Game.IsNextAllowed)
+            {
+                SimpleSpeach.SpeakWithDelay($"{Game.LeftPoints} : {Game.RightPoints}. Победная!", 400);
+            }
+            else
+            {
+                SimpleSpeach.SpeakWithDelay($"{Game.LeftPoints} : {Game.RightPoints}", 400);
+            }
+
         }
 
         private void OnGameTappedCommand()
@@ -124,5 +140,33 @@ namespace PingPong.ViewModels
         }
 
         #endregion
+    }
+
+    public static class SimpleSpeach
+    {
+        private static CancellationTokenSource token;
+
+        public static async void SpeakWithDelay(string text, int miliseconds)
+        {
+            if (token == null)
+            {
+                token = new CancellationTokenSource();
+            }
+            else
+            {
+                token.Cancel();
+                token = new CancellationTokenSource();
+            }
+
+            await Task.Delay(miliseconds, token.Token).ContinueWith(r =>
+            {
+                if (!r.IsCanceled)
+                {
+                    token = null;
+                    TextToSpeech.SpeakAsync(text, new SpeechOptions() { Pitch = 1.3f, Volume = 1 });
+                }
+            });
+
+        }
     }
 }
