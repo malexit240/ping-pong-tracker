@@ -2,6 +2,8 @@
 using System.Collections.ObjectModel;
 using PingPong.Enums;
 using System.ComponentModel;
+using System;
+using System.Timers;
 
 namespace PingPong.Models
 {
@@ -66,6 +68,50 @@ namespace PingPong.Models
                 PointsToWin = game.PointsToWin,
                 IsNextAllowed = game.IsNextAllowed,
             };
+        }
+    }
+
+    public class TimeLogger : BindableBase
+    {
+        private Timer _timer = new Timer(1000);
+        private DateTime _startTimerPoint;
+
+        public TimeLogger()
+        {
+            _timer.Elapsed += OnTimerElapsed;
+        }
+
+        private void OnTimerElapsed(object sender, ElapsedEventArgs e)
+        {
+            ElapsedTime = e.SignalTime - _startTimerPoint;
+        }
+
+        private TimeSpan _elapsedTime;
+        public TimeSpan ElapsedTime
+        {
+            get => _elapsedTime;
+            set => SetProperty(ref _elapsedTime, value);
+        }
+
+        private int _gamesCount;
+        public int GamesCount
+        {
+            get => _gamesCount;
+            set => SetProperty(ref _gamesCount, value);
+        }
+
+        private bool _isTimerStarted;
+        public bool IsTimerStarted
+        {
+            get => _isTimerStarted;
+            set => SetProperty(ref _isTimerStarted, value);
+        }
+
+        public void StartTimer()
+        {
+            IsTimerStarted = true;
+            _startTimerPoint = DateTime.Now;
+            _timer.Start();
         }
     }
 

@@ -1,12 +1,12 @@
-﻿using Prism.Navigation;
-using PingPong.Models;
-using Prism.Commands;
-using System.Windows.Input;
-using PingPong.Views;
+﻿using PingPong.Models;
 using PingPong.Services;
-using Xamarin.Essentials;
-using System.Threading.Tasks;
+using PingPong.Views;
+using Prism.Commands;
+using Prism.Navigation;
 using System.Threading;
+using System.Threading.Tasks;
+using System.Windows.Input;
+using Xamarin.Essentials;
 
 namespace PingPong.ViewModels
 {
@@ -26,6 +26,7 @@ namespace PingPong.ViewModels
             _gameService = gameService;
 
             Game = (GameViewModel)_gameService.GetGame();
+            TimeLogger = new TimeLogger();
         }
 
         #region -- Public Properties --
@@ -35,6 +36,13 @@ namespace PingPong.ViewModels
         {
             get => _game;
             set => SetProperty(ref _game, value);
+        }
+
+        private TimeLogger _timeLogger;
+        public TimeLogger TimeLogger
+        {
+            get => _timeLogger;
+            set => SetProperty(ref _timeLogger, value);
         }
 
         private bool _isPresented;
@@ -69,12 +77,11 @@ namespace PingPong.ViewModels
         {
             if (Game.IsNextAllowed)
             {
-                if (Game.LeftPoints >= Game.PointsToWin || Game.RightPoints >= Game.PointsToWin)
-                {
-                    Game.LeftPoints = Game.RightPoints = 0;
-                    Game.IsNextAllowed = false;
-                    SimpleSpeach.SpeakWithDelay($"Погнали", 0);
-                }
+                Game.RightPoints = 0;
+                Game.LeftPoints = 0;
+                Game.IsNextAllowed = false;
+                SimpleSpeach.SpeakWithDelay($"Погнали", 0);
+                TimeLogger.GamesCount++;
             }
         }
 
@@ -119,11 +126,16 @@ namespace PingPong.ViewModels
 
             if (Game.IsNextAllowed)
             {
-                SimpleSpeach.SpeakWithDelay($"{Game.LeftPoints} : {Game.RightPoints}. Победная!", 400);
+                SimpleSpeach.SpeakWithDelay($"{Game.LeftPoints} {Game.RightPoints}. Победная!", 400);
             }
             else
             {
-                SimpleSpeach.SpeakWithDelay($"{Game.LeftPoints} : {Game.RightPoints}", 400);
+                SimpleSpeach.SpeakWithDelay($"{Game.LeftPoints} {Game.RightPoints}", 400);
+            }
+
+            if (!TimeLogger.IsTimerStarted)
+            {
+                TimeLogger.StartTimer();
             }
 
         }
@@ -163,7 +175,7 @@ namespace PingPong.ViewModels
                 if (!r.IsCanceled)
                 {
                     token = null;
-                    TextToSpeech.SpeakAsync(text, new SpeechOptions() { Pitch = 1.3f, Volume = 1 });
+                    TextToSpeech.SpeakAsync(text, new SpeechOptions() { Pitch = 1.1f, Volume = 1 });
                 }
             });
 

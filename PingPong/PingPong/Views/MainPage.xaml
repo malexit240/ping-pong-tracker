@@ -2,9 +2,9 @@
 <MasterDetailPage xmlns="http://xamarin.com/schemas/2014/forms"
                   xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
                   xmlns:viewmodels="clr-namespace:PingPong.ViewModels"
-                  xmlns:controls="clr-namespace:PingPong.Controls" 
-                  xmlns:models="clr-namespace:PingPong.Models" 
+                  xmlns:controls="clr-namespace:PingPong.Controls"
                   xmlns:behavior="clr-namespace:PingPong.Behavior"
+                  xmlns:converters="clr-namespace:PingPong.Converters"
                   x:Class="PingPong.Views.MainPage"
                   x:DataType="viewmodels:MainPageViewModel"
                   IsPresented="{Binding IsPresented, Mode=TwoWay}"
@@ -77,6 +77,8 @@
 
                     </Style>
 
+                    <converters:TimeSpanConverter x:Key="timeSpanConverter"/>
+
                 </ResourceDictionary>
 
             </ContentPage.Resources>
@@ -91,13 +93,22 @@
 
                 <!--HEADER-->
                 <StackLayout Grid.Row="0"
-                             Spacing="0">
+                             Spacing="0"
+                             VerticalOptions="CenterAndExpand">
 
-                    <Label Text="Пинг : Понг"
-                           FontSize="48"
-                           FontFamily="Montserrat500"
+                    <Label Text="{Binding TimeLogger.ElapsedTime, StringFormat='Время: {0}', Converter={StaticResource timeSpanConverter}}"
+                           FontSize="24"
+                           FontFamily="Montserrat400"
                            TextColor="{DynamicResource light_gray}"
-                           VerticalOptions="CenterAndExpand"
+                           VerticalOptions="Center"
+                           HorizontalOptions="Fill"
+                           HorizontalTextAlignment="Center"/>
+
+                    <Label Text="{Binding TimeLogger.GamesCount, StringFormat='Количество игр: {0}'}"
+                           FontSize="24"
+                           FontFamily="Montserrat400"
+                           TextColor="{DynamicResource light_gray}"
+                           VerticalOptions="Center"
                            HorizontalOptions="Fill"
                            HorizontalTextAlignment="Center"/>
 
@@ -201,9 +212,6 @@
                             <Setter Property="ColumnDefinitions"
                                     Value="0.35*, 2, 0.65*"/>
 
-                            <!--<Setter Property="Opacity"
-                                    Value="0.1"/>-->
-
                         </DataTrigger>
 
                         <DataTrigger TargetType="Grid"
@@ -213,9 +221,6 @@
                             <Setter Property="ColumnDefinitions"
                                     Value="0.65*, 2, 0.35*"/>
 
-                            <!--<Setter Property="Opacity"
-                                    Value="0.5"/>-->
-
                         </DataTrigger>
 
                         <DataTrigger TargetType="Grid"
@@ -224,9 +229,6 @@
 
                             <Setter Property="ColumnDefinitions"
                                     Value="1*, 2, 1*"/>
-
-                            <!--<Setter Property="Opacity"
-                                    Value="1"/>-->
 
                         </DataTrigger>
 
