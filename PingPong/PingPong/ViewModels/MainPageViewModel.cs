@@ -25,11 +25,18 @@ namespace PingPong.ViewModels
             _settingsManager = settingsManager;
             _gameService = gameService;
 
+            Instance = this;
             Game = (GameViewModel)_gameService.GetGame();
             TimeLogger = new TimeLogger();
         }
 
         #region -- Public Properties --
+
+        public static MainPageViewModel Instance
+        {
+            get;
+            private set;
+        }
 
         private GameViewModel _game;
         public GameViewModel Game
@@ -73,7 +80,7 @@ namespace PingPong.ViewModels
 
         #region -- Private Helpers --
 
-        private void OnNextCommand()
+        public void OnNextCommand()
         {
             if (Game.IsNextAllowed)
             {
@@ -109,7 +116,7 @@ namespace PingPong.ViewModels
             SimpleSpeach.SpeakWithDelay($"{Game.LeftPoints} : {Game.RightPoints}", 400);
         }
 
-        private async void OnPlusCommand(string parameter)
+        public void OnPlusCommand(string parameter)
         {
             switch (parameter)
             {
